@@ -63,8 +63,14 @@ def init_bb_imgs()->tuple[list[pg.Surface],list{int}]
     for r in range(1, 11):
         bb_img=pg.Surface((20*r,20*r))
         pg.draw.circle(bb_img, (255,0,0), (10*r,10*r), 10*r) #爆弾円
-        bb_img.append(bb_img) #爆弾の黒を透明に
-            bb_accs=[a for a in range(1,11)]
+        bb_imgs = []
+        bb_accs = [a for a in range(1, 11)] # 加速度リスト 1〜10
+        for r in range(1, 11):
+        bb_img = pg.Surface((20r, 20r))
+        bb_img.set_colorkey((0, 0, 0)) # 黒を透明化
+        pg.draw.circle(bb_img, (255, 0, 0), (10r, 10r), 10*r)
+        bb_imgs.append(bb_img)
+        return bb_imgs, bb_accs
 
 
 def main():
@@ -116,6 +122,18 @@ def main():
 
         screen.blit(kk_img, kk_rct)
         bb_rct.move_ip(vx,vy)#爆弾を移動
+
+        idx = min(tmr // 500, 9) # 500フレームごとに段階アップ
+        bb_img = bb_imgs[idx]
+        # サイズが変わったのでRectのサイズを更新（中心は維持）
+        curr_center = bb_rec.center
+        bb_rec = bb_img.get_rect()
+        bb_rec.center = curr_center
+    
+        # 加速度を適用した速度で移動
+        avx = vx * bb_accs[idx]
+        avy = vy * bb_accs[idx]
+
 
         yoko, tate = check_bound(bb_rct)
         if not yoko:  # 横方向の判定
