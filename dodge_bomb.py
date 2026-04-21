@@ -59,6 +59,13 @@ def game_over(screen):
     pg.display.update() #画面を更新
     time.sleep(5)  # 5秒間表示
 
+def init_bb_imgs()->tuple[list[pg.Surface],list{int}]
+    for r in range(1, 11):
+        bb_img=pg.Surface((20*r,20*r))
+        pg.draw.circle(bb_img, (255,0,0), (10*r,10*r), 10*r) #爆弾円
+        bb_img.append(bb_img) #爆弾の黒を透明に
+            bb_accs=[a for a in range(1,11)]
+
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
