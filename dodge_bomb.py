@@ -2,6 +2,7 @@ import os
 import sys
 import random
 import pygame as pg
+import time
 
 
 WIDTH, HEIGHT = 1100, 650
@@ -28,6 +29,37 @@ def check_bound(rct:pg.Rect) -> tuple[bool,bool]:
     return yoko, tate
 
 
+def game_over(screen):
+    """
+    ゲームオーバー画面を表示する
+    引数:screen
+    """
+
+    black_img=pg.Surface((WIDTH, HEIGHT)) #黒い背景
+    pg.draw.rect(black_img, (0,0,0), (0,0,WIDTH, HEIGHT)) #黒い背景を描画
+
+    black_img.set_alpha(200) #黒い背景の透明度を設定
+
+    font=pg.font.Font(None,80) #フォントを設定
+    txt=font.render("Game Over", True, (255,255,255)) #ゲームオーバーのテキストを描画
+    txt_rct = txt.get_rect()
+    txt_rct.center = WIDTH // 2, HEIGHT // 2
+
+    kk_crying_img = pg.image.load("fig/8.png") #こうかとんの泣いている画像を読み込む
+    kk_crying_rct1 = kk_crying_img.get_rect()
+    kk_crying_rct1.topleft = WIDTH // 2 - 200, HEIGHT // 2 -50
+    kk_crying_rct2 = kk_crying_img.get_rect()
+    kk_crying_rct2.topleft = WIDTH // 2 + 200, HEIGHT // 2-50
+
+    black_img.blit(txt, txt_rct)
+    black_img.blit(kk_crying_img, kk_crying_rct1)
+    black_img.blit(kk_crying_img, kk_crying_rct2)
+
+    screen.blit(black_img, (0,0)) #ゲームオーバー画面を表示
+    pg.display.update() #画面を更新
+    time.sleep(5)  # 5秒間表示
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -48,11 +80,12 @@ def main():
     
     while True:
         for event in pg.event.get():
-            if event.type == pg.QUIT: 
+            if event.type == pg.QUIT:
                 return
-            
+        
         if kk_rct.colliderect(bb_rct):  # こうかとんと爆弾の衝突判定
             print("ゲームオーバー")
+            game_over(screen)  # ゲームオーバー画面を表示
             return  # ゲームオーバーの意味でmain関数から出る
         screen.blit(bg_img, [0, 0]) 
 
@@ -96,4 +129,3 @@ if __name__ == "__main__":
     main()
     pg.quit()
     sys.exit()
-#a
