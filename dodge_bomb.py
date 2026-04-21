@@ -50,6 +50,10 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
+            
+        if kk_rct.colliderect(bb_rct):  # こうかとんと爆弾の衝突判定
+            print("ゲームオーバー")
+            return  # ゲームオーバーの意味でmain関数から出る
         screen.blit(bg_img, [0, 0]) 
 
         key_lst = pg.key.get_pressed()
@@ -66,20 +70,20 @@ def main():
             if key_lst[key]:
                 sum_mv[0]+=mv[0]
                 sum_mv[1]+=mv[1]
-
+        kk_rct.move_ip(sum_mv)  
         if check_bound(kk_rct) != (True, True):  # 画面外だったら
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
 
+        screen.blit(kk_img, kk_rct)
         bb_rct.move_ip(vx,vy)#爆弾を移動
-        screen.blit(bb_img, bb_rct)#爆弾を表示
+
         yoko, tate = check_bound(bb_rct)
         if not yoko:  # 横方向の判定
             vx *= -1
         if not tate:  # 縦方向の判定
             vy *= -1
-            
-        kk_rct.move_ip(sum_mv)
-        screen.blit(kk_img, kk_rct)
+
+        screen.blit(bb_img, bb_rct)#爆弾を表示
         pg.display.update()
         tmr += 1
         clock.tick(50)
@@ -92,3 +96,4 @@ if __name__ == "__main__":
     main()
     pg.quit()
     sys.exit()
+#a
