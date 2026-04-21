@@ -72,7 +72,6 @@ def init_bb_imgs()->tuple[list[pg.Surface],list{int}]
         bb_imgs.append(bb_img)
         return bb_imgs, bb_accs
 
-
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
