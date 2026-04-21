@@ -1,5 +1,6 @@
 import os
 import sys
+import random
 import pygame as pg
 
 
@@ -20,6 +21,14 @@ def main():
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 300, 200
+
+    bb_img = pg.Surface((20,20))#爆弾用の空
+    pg.draw.circle(bb_img, (255,0,0), (10,10), 10) #爆弾円
+    bb_img.set_colorkey((0,0,0)) #爆弾の黒を透明に
+    bb_rct = bb_img.get_rect() #爆弾Rectを取得
+    bb_rct.centerx = random.randint(0, WIDTH) #爆弾のx座標をランダムに
+    bb_rct.centery = random.randint(0, HEIGHT) #爆弾のy座標をランダムに
+    vx,vy=+5,+5 #爆弾の速度を設定
     clock = pg.time.Clock()
     tmr = 0
     
@@ -45,6 +54,8 @@ def main():
                 sum_mv[1]+=mv[1]
 
 
+        bb_rct.move_ip(vx,vy)#爆弾を移動
+        screen.blit(bb_img, bb_rct)#爆弾を表示
         kk_rct.move_ip(sum_mv)
         screen.blit(kk_img, kk_rct)
         pg.display.update()
@@ -59,5 +70,3 @@ if __name__ == "__main__":
     main()
     pg.quit()
     sys.exit()
-
-#あ
